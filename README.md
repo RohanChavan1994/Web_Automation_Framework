@@ -1,6 +1,6 @@
 # Python Web Automation Framework
 
-Hybrid Custom Framework for Web Automation
+Hybrid Custom Framework for Web Automation (Selenium)
 
 ### Tech Stack
 1. Python 3.11
