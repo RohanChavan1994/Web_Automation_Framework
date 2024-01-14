@@ -11,7 +11,12 @@ running_test:
   stage: test
   image: python:3.11
   script:
+    - apt-get update -qy
+    - apt-get install -y xvfb
     - pip install -r requirements.txt
+    - Xvfb :99 -ac &
+    - export DISPLAY=:99
+    - allure generate --clean --output allure_reports
     - pytest -n auto code/12Jan2024/$TESTCASE_NAME --html=html_report/report.html --alluredir=allure_reports
   artifacts:
     paths:
