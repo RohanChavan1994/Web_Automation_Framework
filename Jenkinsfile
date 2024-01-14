@@ -15,10 +15,10 @@ pipeline {
             steps {
                 // Run commands using the Python path and pip
                 bat 'python -m pip install -r requirements.txt'
-                bat 'python -m pytest .\\code\\3Jan2024\\test_katalon_demo_cura.py --html=.\\html_report\\report.html --alluredir=allure_reports'
+                bat 'python -m pytest .\\code\\12Jan2024\\test_vwo_ddt_gtp2.py --html=.\\html_report\\report.html --alluredir=allure_reports'
 
                 allure includeProperties: false, jdk: '', results: [[path: 'allure_reports']]
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'html_report', reportFiles: 'report.html', reportName: 'HTML_Report', reportTitles: '', useWrapperFileDirectly: true])
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: false, reportDir: 'html_report', reportFiles: 'report.html', reportName: 'HTML_Report', reportTitles: '', useWrapperFileDirectly: true])
             }
         }
     }
@@ -27,8 +27,8 @@ pipeline {
         always {
             script {
                 // Define the paths to be compressed
-                def path1 = "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Pipeline-API-Automation\\allure-report"
-                def path2 = "C:\\ProgramData\\Jenkins\\.jenkins\\jobs\\Pipeline-API-Automation\\htmlreports"
+                def path1 = "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Pipeline-Web-Automation\\allure_reports"
+                def path2 = "C:\\ProgramData\\Jenkins\\.jenkins\\jobs\\Pipeline-Web-Automation\\htmlreports"
 
                 // Combine paths into a single comma-separated string
                 def combinedPaths = "\"${path1}\",\"${path2}\""
