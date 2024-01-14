@@ -1,0 +1,49 @@
+stages:
+  - test
+  - report
+  - deploy
+
+variables:
+  RESULT_FOLDER_NAME: "test_vwo_ddt_gtp2.zip"
+  TESTCASE_NAME: "test_vwo_ddt_gtp2.py"
+
+running_test:
+  stage: test
+  image: python:3.11
+  script:
+    - pip install -r requirements.txt
+    - pytest -n auto code/12Jan2024/$TESTCASE_NAME --html=html_report/report.html --alluredir=allure_reports
+  artifacts:
+    paths:
+      - html_report/
+      - allure_reports/
+    when: always
+  allow_failure: true
+
+compressing_results:
+  stage: report
+  image: python:3.11
+  script:
+    - apt-get update -qy
+    - apt-get install -y zip
+    - zip -r $RESULT_FOLDER_NAME html_report allure_reports
+  artifacts:
+    paths:
+      - $RESULT_FOLDER_NAME
+    when: always
+  dependencies:
+    - running_test
+  allow_failure: false
+
+push_results_to_s3:
+  stage: deploy
+  image:
+    name: amazon/aws-cli:2.4.11
+    entrypoint: [""]
+  script:
+    - aws --version
+    - pwd
+    - aws s3 cp $RESULT_FOLDER_NAME s3://$S3_BUCKET_NAME/
+  dependencies:
+    - compressing_results
+  allow_failure: false
