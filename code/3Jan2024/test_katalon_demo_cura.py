@@ -1,19 +1,27 @@
 import time
+import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
 
-def test_katalon_demo_cura():
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--start-maximized")
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--start-maximized")
+driver = webdriver.Chrome(chrome_options)
 
-    driver = webdriver.Chrome(chrome_options)
+
+def test_open_webpage():
     driver.get("https://katalon-demo-cura.herokuapp.com/")
+
+
+def test_click_make_appointment_btn():
+    assert driver.title == "CURA Healthcare Service", "Invalid title"
 
     make_appointment_btn_ele = driver.find_element(By.XPATH, "//a[@id='btn-make-appointment']")
     make_appointment_btn_ele.click()
 
+
+def test_login():
     assert driver.current_url == "https://katalon-demo-cura.herokuapp.com/profile.php#login", "Invalid URL"
 
     username_ele = driver.find_element(By.XPATH, "//input[@id='txt-username']")
@@ -25,9 +33,11 @@ def test_katalon_demo_cura():
     login_btn_ele = driver.find_element(By.XPATH, "//button[@id='btn-login']")
     login_btn_ele.click()
 
-    assert driver.current_url == "https://katalon-demo-cura.herokuapp.com/#appointment", "Invalid URL"
 
+def test_create_appointment():
     # driver.switch_to.alert.accept()
+
+    assert driver.current_url == "https://katalon-demo-cura.herokuapp.com/#appointment", "Invalid URL"
 
     facility_ele = Select(driver.find_element(By.XPATH, "//select[@id='combo_facility']"))
     facility_ele.select_by_visible_text("Seoul CURA Healthcare Center")
@@ -48,6 +58,9 @@ def test_katalon_demo_cura():
 
     book_appointment_btn = driver.find_element(By.XPATH, "//button[@id='btn-book-appointment']")
     book_appointment_btn.click()
+
+
+def test_verify_appointment_details():
 
     assert driver.current_url == "https://katalon-demo-cura.herokuapp.com/appointment.php#summary", "Invalid URL"
 
@@ -71,5 +84,3 @@ def test_katalon_demo_cura():
 
     home_link_ele = driver.find_element(By.XPATH, "//a[normalize-space()='Home']")
     home_link_ele.click()
-
-    time.sleep(2)
