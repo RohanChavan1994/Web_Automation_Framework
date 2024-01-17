@@ -7,6 +7,13 @@ pipeline {
                 checkout scm
             }
         }
+        
+        stage('Set Display') {
+            steps {
+                // Set the DISPLAY environment variable
+                sh 'export DISPLAY=:0'
+            }
+        }
 
         stage('Run Tests') {
             environment {
