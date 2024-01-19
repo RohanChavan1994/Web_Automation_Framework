@@ -7,13 +7,6 @@ pipeline {
                 checkout scm
             }
         }
-        
-        stage('Set Display') {
-            steps {
-                // Set the DISPLAY environment variable
-                sh 'export DISPLAY=:0'
-            }
-        }
 
         stage('Run Tests') {
             environment {
@@ -22,7 +15,7 @@ pipeline {
             steps {
                 // Run commands using the Python path and pip
                 bat 'python -m pip install -r requirements.txt'
-                bat 'python -m pytest .\\code\\12Jan2024\\test_vwo_ddt_gtp2.py --html=.\\html_report\\report.html --alluredir=allure_reports'
+                bat 'python -m pytest .\\code\\12Jan2024\\test_vwo_ddt_gtp.py --html=.\\html_report\\report.html --alluredir=allure_reports'
 
                 allure includeProperties: false, jdk: '', results: [[path: 'allure_reports']]
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: false, reportDir: 'html_report', reportFiles: 'report.html', reportName: 'HTML_Report', reportTitles: '', useWrapperFileDirectly: true])
